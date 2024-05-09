@@ -21,6 +21,11 @@ jobs:
       run: ls
     - name: Change directory
       run: cd 03-app-dotnet/
+    - name: list
+      run: ls
+    - name: Check for.csproj file
+      run: ls *.csproj
+      continue-on-error: true
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
