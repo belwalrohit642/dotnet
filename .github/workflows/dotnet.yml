@@ -29,10 +29,10 @@ jobs:
       run: dotnet build --no-restore
     - name: Test
       run: dotnet test --no-build --verbosity normal
-    - name: Upload dotnet 
+    - name: Archive build artifact
       uses: actions/upload-artifact@v4
       with:
-            name: dotnet-results-${{ matrix.dotnet-version }}
-            path: TestResults-${{ matrix.dotnet-version }}
+            name: dotnet-artifact
+            path: 03-app-dotnet/publish
           # Use always() to always run this step to publish test results when there are test failures
       if: ${{ always() }}
