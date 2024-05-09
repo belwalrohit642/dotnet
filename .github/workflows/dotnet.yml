@@ -1,24 +1,29 @@
-name: .NET
+name:.NET
 
 on:
   push:
     branches: [ "master" ]
   pull_request:
     branches: [ "master" ]
-    
+
 jobs:
   build:
     runs-on: self-hosted
     defaults:
       run:
-        working-directory: ./03-app-dotnet
+        working-directory:./03-app-dotnet
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
-    - name: Setup .NET
+    - name: Setup.NET
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 6.0.x
+    - name: Use Docker container for setup
+      uses: docker://mcr.microsoft.com/dotnet/sdk:6.0 AS setup-env
+      with:
+        entrypoint: /bin/bash
+        args: -c "apt-get update && apt-get install -y tar gzip && tar -xzf dotnet.tar.gz -C /usr/local/share/dotnet && rm dotnet.tar.gz"
     - name: Verify Directory Change
       run: pwd    
     - name: List files
@@ -30,4 +35,4 @@ jobs:
     - name: Test
       run: dotnet test --no-build --verbosity normal
     - name: Run the Publish
-      run: dotnet publish --configuration Release --no-restore --output ./publish      
+      run: dotnet publish --configuration Release --no-restore --output./publish
