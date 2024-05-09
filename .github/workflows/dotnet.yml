@@ -15,10 +15,10 @@ jobs:
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 6.0.x
-    - name: Change directory
-      run: cd /home/runner/work/dotnet/dotnet/03-app-dotnet
     - name: Verify Directory Change
       run: pwd
+    - name: Change directory
+      run: cd 03-app-dotnet/
     - name: list
       run: ls
     - name: Restore dependencies
