@@ -20,8 +20,8 @@ jobs:
     - name: Change directory
       run: cd 03-app-dotnet
     - name: Restore dependencies
-      run: dotnet restore
+      run: dotnet restore app-dotnet.csproj
     - name: Build
-      run: dotnet build --no-restore
+      run: dotnet build --no-restore app-dotnet.csproj
     - name: Test
-      run: dotnet test --no-build --verbosity normal
+      run: dotnet test --no-build --verbosity normal app-dotnet.csproj
