@@ -18,7 +18,7 @@ jobs:
       with:
         dotnet-version: 6.0.x
     - name: Change directory
-      run: cd 03-app-dotnet
+      run: cd /home/runner/work/dotnet/dotnet/03-app-dotnet
     - name: Print Working Directory
       run: pwd
     - name: list
