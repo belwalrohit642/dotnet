@@ -8,10 +8,7 @@ on:
     
 jobs:
   build:
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./03-app-dotnet
+    runs-on: self-hosted
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
@@ -30,12 +27,5 @@ jobs:
     - name: Test
       run: dotnet test --no-build --verbosity normal
     - name: Run the Publish
-      run: dotnet publish --configuration Release --no-restore --output ./publish      
-    - name: FTP-Deploy-Action
-      uses: sebastianpopp/ftp-action@releases/v2
-      with:
-        host: 172.210.72.10
-        user: Animesh
-        password: ${{ secrets.FTP_PASSWORD }}
-        localDir: "/home/runner/work/dotnet/dotnet/03-app-dotnet/publish"
-        remoteDir: "ftp-site" 
+      run: dotnet publish --configuration Release --no-restore --output ./publish
+      working-directory: ./03-app-dotnet
