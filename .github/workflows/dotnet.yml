@@ -19,9 +19,9 @@ jobs:
         dotnet-version: 6.0.x
     - name: Change directory
       run: cd 03-app-dotnet
-    - name: Debug: Print Working Directory
+    - name: Print Working Directory
       run: pwd
-    - name: Debug: list
+    - name: list
       run: ls
     - name: Restore dependencies
       run: dotnet restore
