@@ -9,6 +9,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./03-app-dotnet
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
@@ -19,9 +22,6 @@ jobs:
     - name: Verify Directory Change
       run: pwd    
     - name: List files
-      run: ls
-    - name: Navigate to project 
-      working-directory: ./03-app-dotnet
       run: ls
     - name: Restore dependencies
       run: dotnet restore
