@@ -29,10 +29,13 @@ jobs:
       run: dotnet build --no-restore
     - name: Test
       run: dotnet test --no-build --verbosity normal
-    - name: Archive build artifact
-      uses: actions/upload-artifact@v4
+    - name: Run the Publish
+      run: dotnet publish --configuration Release --no-restore --output ./publish      
+    - name: FTP-Deploy-Action
+      uses: sebastianpopp/ftp-action@releases/v2
       with:
-            name: dotnet-artifact
-            path: 03-app-dotnet/publish
-          # Use always() to always run this step to publish test results when there are test failures
-      if: ${{ always() }}
+        host: 172.210.72.10
+        user: Animesh
+        password: ${{ secrets.FTP_PASSWORD }}
+        localDir: "/home/runner/work/dotnet/dotnet/03-app-dotnet/publish"
+        remoteDir: "ftp-site" 
