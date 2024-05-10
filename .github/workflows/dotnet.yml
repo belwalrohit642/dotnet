@@ -38,4 +38,5 @@ jobs:
         username: ${{ secrets.WINDOWS_SERVER_USERNAME }}
         password: ${{ secrets.WINDOWS_SERVER_PASSWORD }}
         script: |
-             powershell.exe -Command "robocopy '${{ github.workspace }}/publish' 'C:\\inetpub\\deploy' /MIR"
+             Write-Host "Current directory is: $env:GITHUB_WORKSPACE"
+             powershell.exe -Command "robocopy '${{ github.workspace }}\publish' 'C:\\inetpub\\deploy' /MIR"
