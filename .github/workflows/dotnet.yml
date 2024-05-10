@@ -38,4 +38,4 @@ jobs:
         username: ${{ secrets.WINDOWS_SERVER_USERNAME }}
         password: ${{ secrets.WINDOWS_SERVER_PASSWORD }}
         script: |
-             robocopy "${{ github.workspace }}/publish" "C:\inetpub\deploy" /MIR
+             powershell.exe -Command "robocopy '${{ github.workspace }}/publish' 'C:\\inetpub\\deploy' /MIR"
