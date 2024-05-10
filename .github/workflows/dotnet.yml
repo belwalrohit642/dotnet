@@ -8,7 +8,7 @@ on:
 
 jobs:
   build:
-    runs-on: windows-latest # Ensure this is set to windows-latest
+    runs-on: windows-latest
     defaults:
       run:
         working-directory: ./03-app-dotnet
@@ -38,5 +38,4 @@ jobs:
         username: ${{ secrets.WINDOWS_SERVER_USERNAME }}
         password: ${{ secrets.WINDOWS_SERVER_PASSWORD }}
         script: |
-          # Ensure the script is executed in a Windows environment
           powershell.exe -Command "robocopy '${{ github.workspace }}/publish' 'C:\\inetpub\\deploy' /MIR"
