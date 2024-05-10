@@ -38,4 +38,4 @@ jobs:
         username: ${{ secrets.WINDOWS_SERVER_USERNAME }}
         password: ${{ secrets.WINDOWS_SERVER_PASSWORD }}
         script: |
-            robocopy /home/runner/work/dotnet/dotnet/03-app-dotnet/publish/ "C:\inetpub\deploy" /MIR
+            robocopy "${{ github.workspace }}/publish""C:\inetpub\deploy" /MIR
