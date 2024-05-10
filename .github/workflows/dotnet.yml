@@ -1,4 +1,4 @@
-name:.NET
+name: .NET
 
 on:
   push:
@@ -11,16 +11,16 @@ jobs:
     runs-on: windows-latest # Ensure this is set to windows-latest
     defaults:
       run:
-        working-directory:./03-app-dotnet
+        working-directory: ./03-app-dotnet
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
-    - name: Setup.NET
+    - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 6.0.x
     - name: Verify Directory Change
-      run: pwd    
+      run: pwd
     - name: List files
       run: ls
     - name: Restore dependencies
@@ -30,7 +30,7 @@ jobs:
     - name: Test
       run: dotnet test --no-build --verbosity normal
     - name: Run the Publish
-      run: dotnet publish --configuration Release --no-restore --output./publish
+      run: dotnet publish --configuration Release --no-restore --output ./publish
     - name: Deploy to Windows Server
       uses: appleboy/ssh-action@master
       with:
