@@ -44,4 +44,4 @@ jobs:
 
       - name: Upload to S3
         run: | 
-         aws s3 cp ./publish s3://aspdotnetbucketdummy/deployasp/ --recursive
+         aws s3 cp ./publish/publish.zip s3://aspdotnetbucketdummy/deployasp/ --recursive
