@@ -36,7 +36,7 @@ jobs:
       - name: zip publish
         run: Compress-Archive -Path ./publish -DestinationPath ./publish/publish.zip
       - name: Verify publish directory
-        run: ls./publish
+        run: ls 
       - name: Configure AWS credentials from Test account
         uses: aws-actions/configure-aws-credentials@v1
         with:
