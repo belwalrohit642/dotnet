@@ -31,3 +31,12 @@ jobs:
       run: dotnet test --no-build --verbosity normal
     - name: Run the Publish
       run: dotnet publish --configuration Release --no-restore --output ./publish
+    - name: Deploy to Windows Server
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.WINDOWS_SERVER_HOST }}
+        username: ${{ secrets.WINDOWS_SERVER_USERNAME }}
+        password: ${{ secrets.WINDOWS_SERVER_PASSWORD }}
+        script: |
+          robocopy "${{ github.workspace }}/publish" "C:\inetpub\deploy" /MIR
+
