@@ -2,9 +2,11 @@ name: .NET
 
 on:
   push:
-    branches: [ "master" ]
+    branches: 
+      - master
   pull_request:
-    branches: [ "master" ]
+    branches: 
+      - master
 
 jobs:
   build:
@@ -13,30 +15,30 @@ jobs:
       run:
         working-directory: ./03-app-dotnet
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: 6.0.x
-    - name: Verify Directory Change
-      run: pwd
-    - name: List files
-      run: ls
-    - name: Restore dependencies
-      run: dotnet restore
-    - name: Build
-      run: dotnet build --no-restore
-    - name: Test
-      run: dotnet test --no-build --verbosity normal
-    - name: Run the Publish
-      run: dotnet publish --configuration Release --no-restore --output ./publish
-    - name: Deploy to Windows Server
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.WINDOWS_SERVER_HOST }}
-        username: ${{ secrets.WINDOWS_SERVER_USERNAME }}
-        password: ${{ secrets.WINDOWS_SERVER_PASSWORD }}
-        script: |
-             Write-Host "Current directory is: $env:GITHUB_WORKSPACE"
-             powershell.exe -Command "robocopy '${{ github.workspace }}\publish' 'C:\\inetpub\\deploy' /MIR"
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 6.0.x
+      - name: Verify Directory Change
+        run: pwd
+      - name: List files
+        run: ls
+      - name: Restore dependencies
+        run: dotnet restore
+      - name: Build
+        run: dotnet build --no-restore
+      - name: Test
+        run: dotnet test --no-build --verbosity normal
+      - name: Run the Publish
+        run: dotnet publish --configuration Release --no-restore --output ./publish
+      - name: Deploy to Windows Server
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.WINDOWS_SERVER_HOST }}
+          username: ${{ secrets.WINDOWS_SERVER_USERNAME }}
+          password: ${{ secrets.WINDOWS_SERVER_PASSWORD }}
+          script: |
+            Write-Host "Current directory is: $env:GITHUB_WORKSPACE"
+            robocopy "${{ github.workspace }}/publish" "C:\\inetpub\\deploy" /MIR
