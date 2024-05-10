@@ -10,7 +10,7 @@ on:
 
 jobs:
   build:
-    runs-on: self-hosted
+    runs-on: windows-latest
     defaults:
       run:
         working-directory: ./03-app-dotnet
@@ -33,12 +33,15 @@ jobs:
         run: dotnet test --no-build --verbosity normal
       - name: Run the Publish
         run: dotnet publish --configuration Release --no-restore --output ./publish
-      - name: Deploy to Windows Server
-        uses: appleboy/ssh-action@master
+      - name: zip publish
+        run: Compress-Archive -Path ./publish -DestinationPath ./publish/publish.zip
+      - name: Configure AWS credentials from Test account
+        uses: aws-actions/configure-aws-credentials@v1
         with:
-          host: ${{ secrets.WINDOWS_SERVER_HOST }}
-          username: ${{ secrets.WINDOWS_SERVER_USERNAME }}
-          password: ${{ secrets.WINDOWS_SERVER_PASSWORD }}
-          script: |
-            Write-Host "Current directory is: $env:GITHUB_WORKSPACE"
-            robocopy "${{ github.workspace }}/publish" "C:\\inetpub\\deploy" /MIR
+         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+         aws-region: us-east-1
+
+      - name: Upload to S3
+        run: | 
+         aws s3 cp ./publish s3://aspdotnetbucketdummy/deployasp/ --recursive
