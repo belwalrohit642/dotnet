@@ -1,21 +1,21 @@
-name: .NET
+name:.NET
 
 on:
   push:
     branches: [ "master" ]
   pull_request:
     branches: [ "master" ]
-    
+
 jobs:
   build:
-    runs-on: windows-latest 
+    runs-on: windows-latest # Ensure this is set to windows-latest
     defaults:
       run:
-        working-directory: ./03-app-dotnet
+        working-directory:./03-app-dotnet
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
-    - name: Setup .NET
+    - name: Setup.NET
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 6.0.x
@@ -30,7 +30,7 @@ jobs:
     - name: Test
       run: dotnet test --no-build --verbosity normal
     - name: Run the Publish
-      run: dotnet publish --configuration Release --no-restore --output ./publish
+      run: dotnet publish --configuration Release --no-restore --output./publish
     - name: Deploy to Windows Server
       uses: appleboy/ssh-action@master
       with:
@@ -38,4 +38,5 @@ jobs:
         username: ${{ secrets.WINDOWS_SERVER_USERNAME }}
         password: ${{ secrets.WINDOWS_SERVER_PASSWORD }}
         script: |
-            robocopy "${{ github.workspace }}/publish""C:\inetpub\deploy" /MIR
+          # Ensure the script is executed in a Windows environment
+          powershell.exe -Command "robocopy '${{ github.workspace }}/publish' 'C:\\inetpub\\deploy' /MIR"
