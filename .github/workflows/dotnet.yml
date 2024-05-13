@@ -2,34 +2,48 @@ name: .NET
 
 on:
   push:
-    branches: [ "master" ]
+    branches: 
+      - master
   pull_request:
-    branches: [ "master" ]
+    branches: 
+      - master
 
 jobs:
   build:
-    runs-on: self-hosted
+    runs-on: windows-latest
     defaults:
       run:
         working-directory: ./03-app-dotnet
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: 6.0.x
-    - name: Verify Directory Change
-      run: pwd
-    - name: List files
-      run: ls
-    - name: Restore dependencies
-      run: dotnet restore
-    - name: Build
-      run: dotnet build --no-restore
-    - name: Test
-      run: dotnet test --no-build --verbosity normal    
-    - name: Run the Publish
-      run: dotnet publish --configuration Release --no-restore --output ./publish
-    - name: zip publish
-      run: Compress-Archive -Path ./publish -DestinationPath ./publish/publish.zip
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 6.0.x
+      - name: Verify Directory Change
+        run: pwd
+      - name: List files
+        run: ls
+      - name: Restore dependencies
+        run: dotnet restore
+      - name: Build
+        run: dotnet build --no-restore
+      - name: Test
+        run: dotnet test --no-build --verbosity normal
+      - name: Run the Publish
+        run: dotnet publish --configuration Release --no-restore --output ./publish
+      - name: zip publish
+        run: Compress-Archive -Path ./publish -DestinationPath ./publish/publish.zip
+      - name: Verify publish directory
+        run: ls ./publish
+      - name: Configure AWS credentials from Test account
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+         aws-region: us-east-1
+
+      - name: Upload to S3
+        run: | 
+         aws s3 cp ./publish/publish.zip s3://aspdotnetbucketdummy/deployasp/ 
