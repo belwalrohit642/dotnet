@@ -11,7 +11,17 @@ pool:
 
 variables:
   buildConfiguration: 'Release'
+  
 
 steps:
-- script: dotnet build --configuration $(buildConfiguration)
-  displayName: 'dotnet build $(buildConfiguration)'
+ - task: NuGetCommand@2
+   inputs:
+    command: 'restore'
+    restoreSolution: '**/*.csproj'
+    feedsToUse: 'config'
+
+ - task: DotNetCoreCLI@2
+   inputs:
+    command: 'build'
+    projects: './03-app-dotnet'
+    workingDirectory: './03-app-dotnet'
