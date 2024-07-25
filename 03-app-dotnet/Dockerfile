@@ -10,7 +10,7 @@ RUN dotnet publish -c Release -o out
 
 # Build runtime image 
 FROM mcr.microsoft.com/dotnet/aspnet:6.0 
-WORKDIR /app
+WORKDIR /app 
 EXPOSE 4000
 COPY --from=build-env /app/out .
 ENTRYPOINT ["dotnet", "app-dotnet.dll"]
