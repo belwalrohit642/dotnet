@@ -26,6 +26,27 @@ steps:
     projects: './03-app-dotnet'
     workingDirectory: './03-app-dotnet'
 
+ - task: SonarQubePrepare@6
+   inputs:
+    SonarQube: 'sonar-azure'
+    scannerMode: 'MSBuild'
+    projectKey: 'aspnetcore_aspnetcore_e9dda451-f211-4036-9d4e-17c46bf7b6d3'
+    projectName: 'sonar-azure'
+
+
+ - task: DotNetCoreCLI@2
+   inputs:
+    command: 'build'
+    projects: './03-app-dotnet'
+    workingDirectory: './03-app-dotnet'
+    
+ - task: SonarQubeAnalyze@6
+
+ - task: SonarQubePublish@6
+   inputs:
+    pollingTimeoutSec: '300'
+
+
  - task: DotNetCoreCLI@2
    inputs:
     command: 'publish'
