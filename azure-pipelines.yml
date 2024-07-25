@@ -1,0 +1,63 @@
+# ASP.NET Core
+# Build and test ASP.NET Core projects targeting .NET Core.
+# Add steps that run tests, create a NuGet package, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
+
+trigger:
+- dev
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+  buildConfiguration: 'Release'
+  
+
+steps:
+ - task: NuGetCommand@2
+   inputs:
+    command: 'restore'
+    restoreSolution: '**/*.csproj'
+    feedsToUse: 'config'
+
+ - task: DotNetCoreCLI@2
+   inputs:
+    command: 'build'
+    projects: './03-app-dotnet'
+    workingDirectory: './03-app-dotnet'
+
+ - task: SonarQubePrepare@6
+   inputs:
+    SonarQube: 'sonar-azure'
+    scannerMode: 'MSBuild'
+    projectKey: 'aspnetcore_aspnetcore_e9dda451-f211-4036-9d4e-17c46bf7b6d3'
+    projectName: 'sonar-azure'
+
+
+ - task: DotNetCoreCLI@2
+   inputs:
+    command: 'build'
+    projects: './03-app-dotnet'
+    workingDirectory: './03-app-dotnet'
+    
+ - task: SonarQubeAnalyze@6
+
+ - task: SonarQubePublish@6
+   inputs:
+    pollingTimeoutSec: '300'
+
+
+ - task: DotNetCoreCLI@2
+   inputs:
+    command: 'publish'
+    publishWebProjects: true
+    arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+    zipAfterPublish: True
+
+
+ - task: PublishBuildArtifacts@1
+   inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'drop'
+    publishLocation: 'Container'
+
